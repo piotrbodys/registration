@@ -3,16 +3,17 @@ const Eventmodel = require("../models/EventModel")
 module.exports = {
   index:(req, res, next) => {
     Eventmodel.find({})
-    .then( (err, result) => {
-      if (err) {
-        return res.status(500).json({
-          message: "Error while fetching Events",
-          error: err 
-        })
-      }
+    .then( (result) => {
+      
 
       res.json(result)
     })
+    .catch((err) => {
+      return res.status(500).json({
+      message: "Error while creating Event",
+      error: err 
+    })
+  })
  },
 
  create:(req, res, next) => {
@@ -22,20 +23,21 @@ module.exports = {
       city: req.body.city
     })
 
-    event.save().then((err, event) => {
-      if (err) {
-        return res.status(500).json({
+    event.save().then((event) => {
+      // res.json({
+      //   formData: req.body,
+      //   error: false 
+      // })
+        return res.status(201).json(event)
+    })
+        .catch((err) => {
+          return res.status(500).json({
           message: "Error while creating Event",
           error: err 
         })
-      }
+      })
 
-      return res.status(201).json(event)
-    })
-    // res.json({
-    //   formData: req.body,
-    //   error: false 
-    // })
+    
  },
 
  delete:(req, res, next) => {
